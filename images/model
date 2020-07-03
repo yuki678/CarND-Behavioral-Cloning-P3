@@ -1,0 +1,41 @@
+digraph {
+	node [fontname=Helvetica shape=rectangle]
+	edge [arrowhead=open]
+	0 [label="Lambda
+input: (160, 320, 3)
+" fillcolor=white fontcolor=black style=filled]
+	1 [label="Cropping2D
+cropping: ((50, 20), (0, 0))
+" fillcolor=white fontcolor=black style=filled]
+	0 -> 1
+	2 [label="Conv2D
+items: [{'type': 'Conv2D'}, {'type': 'Conv2D'}, {'type': 'Conv2D'}, {'type': 'Conv2D'}, {'type': 'Conv2D'}]
+" fillcolor=white fontcolor=black style=filled]
+	1 -> 2
+	3 [label=Flatten
+ fillcolor=white fontcolor=black style=filled]
+	2 -> 3
+	4 [label=Dense fillcolor="#006699" fontcolor=white style=filled]
+	{
+		40 [label="Dense
+units: 100
+activation: linear
+" fillcolor="#006699" fontcolor=white style=filled]
+		41 [label="Dense
+units: 50
+activation: linear
+" fillcolor="#006699" fontcolor=white style=filled]
+		40 -> 41
+		42 [label="Dense
+units: 10
+activation: linear
+" fillcolor="#006699" fontcolor=white style=filled]
+		41 -> 42
+		43 [label="Dense
+units: 1
+activation: linear
+" fillcolor="#006699" fontcolor=white style=filled]
+		42 -> 43
+	}
+	3 -> 4
+}

@@ -9,13 +9,13 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
+[image1]: ./images/model.png "Model Visualization"
+[image2]: ./images/training_center.jpg "Center lane driving"
+[image3]: ./images/recovery1.jpg "Recovery Image"
+[image4]: ./images/recovery2.jpg "Recovery Image"
+[image5]: ./images/recovery3.jpg "Recovery Image"
+[image6]: ./images/recovery4.jpg "Recovery Image"
+[image7]: ./images/loss.png "Loss chart"
 
 ---
 ### Files Submitted & Code Quality
@@ -25,7 +25,7 @@ The goals / steps of this project are the following:
 My project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
-* model.h5 containing a trained convolution neural network 
+* models/model.h5 containing a trained convolution neural network 
 * Behavioral_Cloning.md or writeup_report.pdf summarizing the results
 
 #### 2. Submission includes functional code
@@ -103,6 +103,36 @@ The overall strategy for deriving a model architecture was to utilize well-known
 
 My first step was to use [LeNet](http://yann.lecun.com/exdb/lenet/) model. I added a Lambda layer at the beginning to to normalize the input, followed by a Cropping Layer to crop the images as the above part of each picture is more or less scenery and thought those would become noises. This could move the car for a certain seconds but could not keep it within the road till the bridge.
 
+```
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+lambda_1 (Lambda)            (None, 160, 320, 3)       0         
+_________________________________________________________________
+cropping2d_1 (Cropping2D)    (None, 90, 320, 3)        0         
+_________________________________________________________________
+conv2d_1 (Conv2D)            (None, 86, 316, 6)        456       
+_________________________________________________________________
+max_pooling2d_1 (MaxPooling2 (None, 43, 158, 6)        0         
+_________________________________________________________________
+conv2d_2 (Conv2D)            (None, 39, 154, 6)        906       
+_________________________________________________________________
+max_pooling2d_2 (MaxPooling2 (None, 19, 77, 6)         0         
+_________________________________________________________________
+flatten_1 (Flatten)          (None, 8778)              0         
+_________________________________________________________________
+dense_1 (Dense)              (None, 120)               1053480   
+_________________________________________________________________
+dense_2 (Dense)              (None, 84)                10164     
+_________________________________________________________________
+dense_3 (Dense)              (None, 1)                 85        
+=================================================================
+Total params: 1,065,091
+Trainable params: 1,065,091
+Non-trainable params: 0
+_________________________________________________________________
+```
+
 Then, I tried [NVidia Autonomous Car Group model](https://developer.nvidia.com/blog/deep-learning-self-driving-cars/), which is described above. This model could almost complete the first track but still failed and thus I added data augmentation by flipping the image to compensate the anti clockwise track.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
@@ -119,23 +149,19 @@ To capture good driving behavior, I first recorded two laps on track one using c
 
 ![alt text][image2]
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like:
+I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn how to go back to the road when it is off. These images show what a recovery looks like.
 
 ![alt text][image3]
 ![alt text][image4]
 ![alt text][image5]
+![alt text][image6]
 
 Then I repeated this process on track two in order to get more data points.
 
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
+To augment the data set, I also flipped images and angles, while keeping the number of data per epoch as original the number of original data.
 
 After the collection process, I had X number of data points. I then preprocessed this data by ...
 
 As a result of training, the MSE error was reduced for both training set and validation set as follows and the car could drive without fall off the road.
 
-
-
+![alt text][image7]
